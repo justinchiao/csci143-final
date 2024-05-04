@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## What this repo does
 This repo is a flask application within docker containers. It uses Nginx to handle client requests and Gunicorn as the WSGI. The server can contain Postgres databases, static files, and media files. Media files can be uploaded by the user in a web browser at http://localhost:1317/upload.
 
@@ -28,3 +29,8 @@ $ docker-compose -f docker-compose.prod.yml exec web python manage.py create_db
 ```
 
 <img src='example.gif' width=100%/>
+=======
+# csci143-final
+
+[![](https://github.com/justinchiao/csci143-final/workflows/web-service/badge.svg)]
+>>>>>>> 34cc0396edd239ddca03fea0c309b7849c4c975c
