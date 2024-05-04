@@ -19,3 +19,17 @@ jobs:
         git submodule update
         docker-compose up -d --build
         docker ps -a
+        
+  dockerProd:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: setup python
+      run: |
+        pip3 install -r services/web/requirements.txt
+    - name: docker
+      run: |
+        git submodule init
+        git submodule update
+        docker-compose -f docker-compose.prod.yml up -d --build
+        docker ps -a
