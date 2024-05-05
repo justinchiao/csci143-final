@@ -12,11 +12,11 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 
 
-#app = Flask(__name__)
-#app.config.from_object("project.config.Config")
-#db = SQLAlchemy(app)
+app = Flask(__name__)
+app.config.from_object("project.config.Config")
+db = SQLAlchemy(app)
 
-engine=sqlalchemy.create_engine("postgresql://
+#engine=sqlalchemy.create_engine("postgresql://
 
 def are_creds_good(user,pw):
     #look into db and find 
@@ -41,7 +41,10 @@ def hello_world():
     #check if logged in
     username=request.cookies.get('username')
     password=request.cookies.get('password')
-    good_credentials=are_creds_good(username,password)
+    if request.cookies.get('loggedIn')=='true':
+        good_credentials=True
+    else:
+        good_credentials=False
 
     messages=['query', 'query']
     return render_template('root.html', logged_in=good_credentials, messages=messages) 
@@ -64,6 +67,7 @@ def login():
             response = make_response(template)
             response.set_cookie('username', username)
             response.set_cookie('password', password)
+            response.set_cookie('loggedIn', 'true')
             return response
 
     return render_template('login.html')
@@ -71,7 +75,10 @@ def login():
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
     response = redirect('/')
-    response.set_cookie('username','password', max_age=0)
+    #response.CookieJar.clear()
+    response.set_cookie('username', max_age=0)
+    response.set_cookie('password', max_age=0)
+    response.set_cookie('loggedIn', max_age=0)
     return response
 
 @app.route("/create_account", methods=["GET", "POST"])
