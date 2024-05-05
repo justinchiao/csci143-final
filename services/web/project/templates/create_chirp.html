@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>New Chirp</h2>
+
+<form action="create_chirp" method="POST">
+    <textarea type=text name='chirp:' maxlength=280 wrap=hard cols=45 placeholder="Your chirp here"></textarea>
+    <input type=submit value=chirp>
+</form>
+
+
+{% endblock %}

@@ -16,7 +16,8 @@ app = Flask(__name__)
 app.config.from_object("project.config.Config")
 db = SQLAlchemy(app)
 
-#engine=sqlalchemy.create_engine("postgresql://
+engine=sqlalchemy.create_engine("postgresql://hello_flask_dev:pass@localhost:1318/", connect_args={'application_name':'__init__.py'})
+connection=engine.connect()
 
 def are_creds_good(user,pw):
     #look into db and find 
@@ -63,7 +64,7 @@ def login():
             return render_template('login.html', bad_credentials=True)
         else:
 
-            template = render_template('login.html', bad_credentials=False, logged_in=True)
+            template = render_template('root.html', bad_credentials=False, logged_in=True)
             response = make_response(template)
             response.set_cookie('username', username)
             response.set_cookie('password', password)
@@ -83,10 +84,30 @@ def logout():
 
 @app.route("/create_account", methods=["GET", "POST"])
 def create_account():
-    pass
+    if request.cookies.get('loggedIn')=='true':
+        good_credentials=True
+        return render_template('root.html', logged_in=good_credentials)
+    else:
+        good_credentials=False
+    username=request.form.get("username")
+    #find if this username already exists in user
+    
+    firstName=request.form.get("firstname")
+    lastName=request.form.get("lastname")
+    #find current largest user_id, increment 
+
+
 @app.route("/create_chirp", methods=["GET", "POST"])
-def create_message():
-    pass
+def create_chirp():
+    if request.cookies.get('loggedIn')=='true':
+        good_credentials=True
+    else:
+        good_credentials=False
+    chirp=request.form.get("chirp")
+    #get user id info
+    #add to database
+    return render_template('create_chirp.html', logged_in=good_credentials)
+
 @app.route("/search", methods=["GET", "POST"])
 def search():
     pass
