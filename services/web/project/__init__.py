@@ -4,18 +4,26 @@ from flask import (
     jsonify,
     send_from_directory,
     request,
-    render_template
+    render_template,
+    make_response,
+    redirect
 )
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 
 
-app = Flask(__name__)
-app.config.from_object("project.config.Config")
-db = SQLAlchemy(app)
+#app = Flask(__name__)
+#app.config.from_object("project.config.Config")
+#db = SQLAlchemy(app)
 
-def are_creds_good(user,pass):
+engine=sqlalchemy.create_engine("postgresql://
+
+def are_creds_good(user,pw):
     #look into db and find 
+    if user=='justin' and pw=='1234':
+        return True
+    else:
+        return False
 
 class User(db.Model):
     __tablename__ = "users"
@@ -29,18 +37,14 @@ class User(db.Model):
 
 
 @app.route("/")
-def hello_world()
-    return render_template('root.html') 
+def hello_world():
+    #check if logged in
+    username=request.cookies.get('username')
+    password=request.cookies.get('password')
+    good_credentials=are_creds_good(username,password)
 
-
-@app.route("/static/<path:filename>")
-def staticfiles(filename):
-    return send_from_directory(app.config["STATIC_FOLDER"], filename)
-
-
-@app.route("/media/<path:filename>")
-def mediafiles(filename):
-    return send_from_directory(app.config["MEDIA_FOLDER"], filename)
+    messages=['query', 'query']
+    return render_template('root.html', logged_in=good_credentials, messages=messages) 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -48,18 +52,34 @@ def login():
     password=request.form.get("password")
     
     good_credentials = are_creds_good(username,password)
-    
+
     if username is None:
         return render_template('login.html', bad_credentials=False)
     else:
         if not good_credentials:
             return render_template('login.html', bad_credentials=True)
         else:
-            return render_template('login.html', bad_credentials=False)
+
+            template = render_template('login.html', bad_credentials=False, logged_in=True)
+            response = make_response(template)
+            response.set_cookie('username', username)
+            response.set_cookie('password', password)
+            return response
 
     return render_template('login.html')
 
 @app.route("/logout", methods=["GET", "POST"])
+def logout():
+    response = redirect('/')
+    response.set_cookie('username','password', max_age=0)
+    return response
+
 @app.route("/create_account", methods=["GET", "POST"])
-@app.route("/create_message", methods=["GET", "POST"])
+def create_account():
+    pass
+@app.route("/create_chirp", methods=["GET", "POST"])
+def create_message():
+    pass
 @app.route("/search", methods=["GET", "POST"])
+def search():
+    pass
