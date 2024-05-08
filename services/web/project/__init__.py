@@ -109,10 +109,13 @@ def add_chirp(username, chirp):
         'time':time,
         'text': chirp
     })
-    return None
+
+def highlight(term, text):
+    return re.sub('(?i)'+term, '<mark>'+term+'</mark>', text)
+
 
 def search_chirps(term, page):
-    term = re.sub(' +', ' | ', term)
+    sql_term = re.sub(' +', ' | ', term)
     sql = sqlalchemy.sql.text("""
         SELECT id_users, created_at, text, a <=> to_tsquery('english', :term) as rank
         FROM chirps
@@ -123,13 +126,13 @@ def search_chirps(term, page):
         
     res = connection.execute(sql, {
         'offset':(page)*20,
-        'term':term
+        'term':sql_term
     })
     chirps=[]
     for chirp in res.fetchall():
         id_user=chirp[0]
         time=chirp[1]
-        text=chirp[2]
+        text=highlight(term, chirp[2])
         sql = sqlalchemy.sql.text("""
             SELECT username from users
             WHERE id_users=:id;

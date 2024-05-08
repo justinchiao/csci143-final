@@ -13,7 +13,7 @@
     {% for chirp in chirps %}
     <div style='margin:30px'>
         <h4>{{chirp['username']}}</h4>
-        <p>{{chirp['text']}}</p>
+        <p>{{chirp['text']|safe}}</p>
         <p>written at {{chirp['time']}}</p>
     </div>
     {% endfor %}
