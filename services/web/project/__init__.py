@@ -10,32 +10,55 @@ from flask import (
 )
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
-
+import sqlalchemy
+import datetime
 
 app = Flask(__name__)
-app.config.from_object("project.config.Config")
-db = SQLAlchemy(app)
 
-engine=sqlalchemy.create_engine("postgresql://hello_flask_dev:pass@localhost:1318/", connect_args={'application_name':'__init__.py'})
+engine=sqlalchemy.create_engine("postgresql://postgres:pass@postgres:5432", connect_args={'application_name':'__init__.py'})
 connection=engine.connect()
 
 def are_creds_good(user,pw):
-    #look into db and find 
-    if user=='justin' and pw=='1234':
-        return True
-    else:
+    #look into db and find
+    sql = sqlalchemy.sql.text("""
+        SELECT id FROM users
+        WHERE username = :user
+        and password = :pw;
+            """)
+    res = connection.execute(sql, {
+        'user':user,
+        'pw':pw
+    })
+
+    if res.first() is None:
         return False
+    else:
+        return True
 
-class User(db.Model):
-    __tablename__ = "users"
-
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(128), unique=True, nullable=False)
-    active = db.Column(db.Boolean(), default=True, nullable=False)
-
-    def __init__(self, email):
-        self.email = email
-
+def root_chirps(page):
+    sql = sqlalchemy.sql.text("""
+        SELECT * from chirps
+        ORDER BY created_at DESC
+        LIMIT 20 OFFSET :offset;
+            """)
+        
+    res = connection.execute(sql, {'offset':(page)*20})
+    chirps=[]
+    for chirp in res.fetchall():
+        id_user=chirp[1]
+        time=chirp[2]
+        text=chirp[3]
+        sql = sqlalchemy.sql.text("""
+            SELECT user_name from users
+            WHERE id_users=:id;
+                """)
+        username = connection.execute(sql, {'id':id_user}).fetchone()[0]
+        chirps.append({
+            'username':username,
+            'text':text,
+            'time':time
+        })
+    return chirps
 
 @app.route("/")
 def hello_world():
@@ -46,9 +69,10 @@ def hello_world():
         good_credentials=True
     else:
         good_credentials=False
+    page=int(request.args.get('page',0))
+    chirps=root_chirps(page)
 
-    messages=['query', 'query']
-    return render_template('root.html', logged_in=good_credentials, messages=messages) 
+    return render_template('root.html', logged_in=good_credentials, chirps=chirps, page=page) 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

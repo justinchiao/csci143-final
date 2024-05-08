@@ -2,5 +2,27 @@
 
 {% block content %}
 <h1>Welcome to Chirper</h1>
-{% endblock %}
 
+<body>
+    {% for chirp in chirps %}
+    <div style='margin:30px'>
+        <h4>{{chirp['username']}}</h4>
+        <p>{{chirp['text']}}</p>
+        <p>written at {{chirp['time']}}</p>
+    </div>
+    {% endfor %}
+
+    <p>page: {{page}}</p>
+    
+    {% if page>0 %}
+    <a href='page={{page-1}}' class=submit>Prev</a>
+    {% endif %}
+
+    {% if chirps|length == 20%}
+    <a href='page={{page+1}}' class=submit>Next</a>
+    {% endif %}
+
+</body>
+
+
+{% endblock %}

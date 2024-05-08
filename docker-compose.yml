@@ -11,15 +11,16 @@ services:
         env_file:
             - ./.env.dev
         depends_on:
-            - db
-    db:
+            - postgres
+    postgres:
         build: services/postgres
         volumes:
+            - ./:/tmp/db
             - postgres_data:/var/lib/postgresql/data/
         environment:
-            - POSTGRES_USER=hello_flask_dev
-            - POSTGRES_PASSWORD=hello_flask
-            - PGUSER=hello_flask_dev
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=pass
+            - PGUSER=postgres
         ports:
             - 1319:5432    
 volumes:
