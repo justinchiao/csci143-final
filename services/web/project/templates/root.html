@@ -13,13 +13,12 @@
     {% endfor %}
 
     <p>page: {{page}}</p>
-    
     {% if page>0 %}
-    <a href='page={{page-1}}' class=submit>Prev</a>
+    <a href="{{url_for('root', page=page-1)}}">prev</a>
     {% endif %}
 
     {% if chirps|length == 20%}
-    <a href='page={{page+1}}' class=submit>Next</a>
+    <a href="{{url_for('root', page=page+1)}}">next</a>
     {% endif %}
 
 </body>

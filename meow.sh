@@ -1,2 +1,2 @@
 docker-compose down
-docker volume prune --all
+docker-compose up -d --build
