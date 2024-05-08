@@ -19,4 +19,4 @@ jobs:
         git submodule update
         docker-compose up -d --build
         docker ps -a
-        sh fake_data.sh
+        sh load_data.sh
