@@ -28,7 +28,8 @@ CREATE TRIGGER tsvectorupdate
 BEFORE UPDATE OR INSERT ON chirps
 FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('a', 'pg_catalog.english', 'text');
 
-CREATE INDEX credentials ON users(username, password text_pattern_ops);
+/*CREATE INDEX credentials1 ON users(username text_pattern_ops);
+CREATE INDEX credentials2 ON users(password text_pattern_ops);
 CREATE INDEX username ON users(id_users, username text_pattern_ops);
 CREATE INDEX chirp_time ON chirps(created_at);
-CREATE INDEX chirp_text ON chirps USING rum(a rum_tsvector_ops);
+CREATE INDEX chirp_text ON chirps USING rum(a rum_tsvector_ops);*/
