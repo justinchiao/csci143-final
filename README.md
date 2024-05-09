@@ -2,32 +2,40 @@
 [![web-service](https://github.com/justinchiao/csci143-final/actions/workflows/web-service.yml/badge.svg)](https://github.com/justinchiao/csci143-final/actions/workflows/web-service.yml)
 
 ## What this repo does
-This repo is a flask application within docker containers. It uses Nginx to handle client requests and Gunicorn as the WSGI. The server can contain Postgres databases, static files, and media files. Media files can be uploaded by the user in a web browser at http://localhost:1317/upload.
+Chirper (formerly known as Y) \
+Basic Twitter clone to demo nginx, flask, and postgres. \
+1 million users world wide! \
+10 million chirps! \
 
 ##Build instructions
 1. Download all files from repository.\
 2. Create the file .env.prod file in the root. It should contain:
 ```
 FLASK_APP=project/__init__.py
-FLASK_DEBUG=0
-DATABASE_URL=postgresql://hello_flask:hello_flask@db:5432/hello_flask_prod
-SQL_HOST=db
+FLASK_DEBUG=1
+DATABASE_URL=postgresql://postgres:pass@localhost:5432
+SQL_HOST=postgres
 SQL_PORT=5432
 DATABASE=postgres
+APP_FOLDER=/home/app/web
+PGUSER=postgres
+PGPASS=pass
 ```
 \
 3. Create the file .env.prod.db in the root. It should contain:
 ```
-POSTGRES_USER=username
-POSTGRES_PASSWORD=password
-POSTGRES_DB=hello_flask_prod
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=pass
+POSTGRES_DB=postgres
 ```
 \
 4. Run: 
 ```
 $ docker-compose -f docker-compose.prod.yml up -d --build
-$ docker-compose -f docker-compose.prod.yml exec web python manage.py create_db
+$ sh load_data.sh
 
 ```
+\
+load_data.sh can be modified to create more fake data. It will create 10x more chirps than there are users.
 =======
 
