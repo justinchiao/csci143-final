@@ -7,7 +7,7 @@ Basic Twitter clone to demo nginx, flask, and postgres. \
 1 million users world wide! \
 10 million chirps!
 
-##Build instructions
+## Build instructions
 1. Download all files from repository.\
 2. Create the file .env.prod file in the root. It should contain:
 ```
@@ -35,7 +35,5 @@ $ docker-compose -f docker-compose.prod.yml up -d --build
 $ sh load_data.sh
 
 ```
-\
 load_data.sh can be modified to create more fake data. It will create 10x more chirps than there are users.
-=======
 
