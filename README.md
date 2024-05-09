@@ -5,7 +5,7 @@
 Chirper (formerly known as Y) \
 Basic Twitter clone to demo nginx, flask, and postgres. \
 1 million users world wide! \
-10 million chirps! \
+10 million chirps!
 
 ##Build instructions
 1. Download all files from repository.\
