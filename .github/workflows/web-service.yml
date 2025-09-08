@@ -15,12 +15,12 @@ jobs:
         pip3 install -r services/web/requirements.txt
     - name: check docker
       run: |
-        docker-compose --version
+        docker compose --version
     - name: docker
       run: |
         git submodule init
         git submodule update
-        docker-compose up -d --build
+        docker compose up -d --build
         docker ps -a
         sleep 20
         sh load_data.sh
