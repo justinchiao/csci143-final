@@ -8,7 +8,7 @@ Basic Twitter clone to demo nginx, flask, and postgres. \
 10 million chirps!
 
 ## Build instructions
-1. Download all files from repository.\
+1. Download all files from repository. \
 2. Create the file .env.prod file in the root. It should contain:
 ```
 FLASK_APP=project/__init__.py
