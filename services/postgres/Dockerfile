@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     vim \
     git \
     gcc \
+    clang-13 \
     postgresql-server-dev-16
 
 RUN cd /tmp \
