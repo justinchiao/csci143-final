@@ -3,7 +3,7 @@
 ###########
 
 # pull official base image
-FROM python:3.11.3-slim-buster as builder
+FROM python:3.11.3-slim-bullseye as builder
 
 # set work directory
 WORKDIR /usr/src/app
@@ -32,8 +32,7 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requir
 #########
 
 # pull official base image
-FROM python:3.11.3-slim-buster
-
+FROM python:3.11.3-slim-bullseye
 # create directory for the app user
 RUN mkdir -p /home/app
 
@@ -53,11 +52,13 @@ COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache /wheels/*
 
+# copy project
+COPY . $APP_HOME
+
 # copy entrypoint-prod.sh
 COPY ./entrypoint.prod.sh $APP_HOME
 
-# copy project
-COPY . $APP_HOME
+RUN sed -i 's/\r$//' $APP_HOME/entrypoint.prod.sh
 
 # chown all the files to the app user
 RUN chown -R app:app $APP_HOME

@@ -14,9 +14,23 @@ args = parser.parse_args()
 
 engine = sqlalchemy.create_engine(args.db, connect_args={
     'application_name': 'fake_data.py',
-    })
+    }, isolation_level="AUTOCOMMIT")
+
 connection = engine.connect()
 
+info = connection.execute(sqlalchemy.text("""
+    SELECT
+        current_database(),
+        current_user,
+        inet_server_addr(),
+        inet_server_port();
+""")).first()
+
+print("DB info:")
+print("  database:", info[0])
+print("  user:", info[1])
+print("  server:", info[2])
+print("  port:", info[3])
 gen=DocumentGenerator()
 
 def generate_users(n):

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
     web:
         build: 
@@ -7,25 +5,31 @@ services:
             dockerfile: Dockerfile.prod
         command: gunicorn --bind 0.0.0.0:5000 manage:app
         expose:
-            - 5000
+            - 5001
+        ports:
+            - 8080:5000
         env_file:
             - ./.env.prod
+        image: csci143-final-web
         depends_on:
             - postgres
+        
     postgres:
         build: ./services/postgres
         volumes:
-            - $HOME/bigdata/postgres_data_prod1:/var/lib/postgresql/data/
+            - /Users/justi/Documents/GitHub/csci143-final/postgres_data_prod1:/var/lib/postgresql/data/
         ports:
             - 1319:5432
         env_file:
             - ./.env.prod.db
+        image: csci143-final-postgres
     nginx:
         build: ./services/nginx
         ports:
             - 1317:80
+        image: csci143-final-nginx
         depends_on:
             - web
-
+    
 volumes:
     postgres_data_prod:
