@@ -1,2 +1,4 @@
 .env.prod.db
 .env.prod
+.venv
+.postgres_data_prod1
