@@ -7,6 +7,8 @@ Basic Twitter clone to demo nginx, flask, and postgres. \
 1 million users world wide! \
 10 million chirps!
 
+Windows compatible branch too
+
 ## Build instructions
 1. Download all files from repository.
 2. Create the file .env.prod file in the root. It should contain:
